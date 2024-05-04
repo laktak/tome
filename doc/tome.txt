@@ -1,0 +1,32 @@
+*tome.txt*  TOME Playbooks for your Terminal
+
+INTRODUCTION                                    *tome*
+
+Tome allows to to manage playbooks for you terminal in combination with vim and tmux.
+
+
+PLAYBOOK                                        *:TomePlayBook*
+
+Usually invoked by a tmux mapping to open Tome in playbook mode.
+
+For more information and setup with tmux go to https://github.com/laktak/tome
+
+
+Default mappings                                *tome-default-mappings*
+
+<Leader>u               Play the current line in normal mode or the selection
+                        to the next (or [count] offset) tmux pane.
+
+<Leader>U               Play the current paragraph to the next (or [count]
+                        offset) tmux pane.
+
+Enter                   When in playbook mode, execute `<Leader>u`.
+                        See |:TomePlayBook|.
+
+
+COMMANDS                                        *TomeCommands*
+
+*:TomePlayBook*         Set the current buffer to playbook mode by mapping `Enter`.
+
+
+ vim:tw=78:ts=8:ft=help:norl:
