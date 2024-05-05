@@ -5,6 +5,15 @@ Playbooks for your Terminal AKA "Your history is history!"
 
 TOME is a notcronym for tmux-vim-terminal-playbooks and maybe slightly better than "TVITP".
 
+- [Goals](#goals)
+- [Introduction](#introduction)
+- [Requirements](#requirements)
+- [Installation](#installation)
+  - [vim plugin](#vim-plugin)
+  - [tmux plugin](#tmux-plugin)
+- [Configuration](#configuration)
+  - [vim options](#vim-options)
+  - [tmux options](#tmux-options)
 
 ## Goals
 
@@ -143,8 +152,6 @@ You can set any of these options by adding them to your `~/.tmux.conf` file:
     set -g <option> "<value>"
 
 Where `<option>` and `<value>` correspond to one of the options specified below
-
-### Keys
 
 | Option                 | Default         | Description |
 | :---                   | :---:           | :--- |
