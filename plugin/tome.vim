@@ -73,25 +73,43 @@ function! s:mapBufferCRToPlay()
   nnoremap <script> <silent> <nowait> <buffer> <CR> :<C-U>call <SID>playLine()<CR>
 endfunction
 
-function! s:playBook()
-  call s:mapBufferCRToPlay()
-  augroup vimPlayCmds
-    au!
-    autocmd BufRead .playbook* call s:playBook()
-  augroup END
+function! s:markScratch(name)
+  let name = len(a:name)>0 ? a:name : 'SCRATCH'
+  let [newname, i] = [name, 1]
+  while bufnr('\['.newname.'\]') >= 0 && i < 100
+    let i += 1
+    let newname = name.i
+  endwhile
+  setlocal buftype=nofile
+  setlocal bufhidden=hide
+  setlocal noswapfile
+  setlocal buflisted
+  exe 'file \['.newname.'\]'
 endfunction
+
 
 nnoremap <silent> <Plug>(TomePlayLine) :<C-U>call <SID>playLine()<CR>
 nnoremap <silent> <Plug>(TomePlayParagraph) :<C-U>call <SID>playParagraph()<CR>
 xnoremap <silent> <Plug>(TomePlaySelection) :<C-U>call <SID>playSel()<CR>
 
-command! TomePlayBook call s:playBook()
+command! TomePlayBook call s:mapBufferCRToPlay()
+command! -nargs=? TomeScratchPad call s:markScratch(<q-args>)
+
 
 if !exists("g:tome_no_mappings")
 
   nmap <Leader>p <Plug>(TomePlayLine)
   nmap <Leader>P <Plug>(TomePlayParagraph)
   xmap <Leader>p <Plug>(TomePlaySelection)
+
+endif
+
+if !exists("g:tome_no_auto")
+
+  augroup tomePlayCmds
+    au!
+    autocmd BufRead .playbook* call s:mapBufferCRToPlay()
+  augroup END
 
 endif
 
