@@ -14,13 +14,13 @@ For more information and setup with tmux go to https://github.com/laktak/tome
 
 Default mappings                                *tome-default-mappings*
 
-<Leader>u               Play the current line in normal mode or the selection
+<Leader>p               Play the current line in normal mode or the selection
                         to the next (or [count] offset) tmux pane.
 
-<Leader>U               Play the current paragraph to the next (or [count]
+<Leader>P               Play the current paragraph to the next (or [count]
                         offset) tmux pane.
 
-Enter                   When in playbook mode, execute `<Leader>u`.
+Enter                   When in playbook mode, execute `<Leader>p`.
                         See |:TomePlayBook|.
 
 

@@ -6,7 +6,7 @@ endif
 let g:loaded_tome = 1
 
 if !exists("g:tome_no_send")
-  let g:tome_no_send = ['vim', 'lf']
+  let g:tome_no_send = ['vim', 'lf', 'gitui']
 endif
 
 function! s:getVisualSelection()
@@ -89,9 +89,9 @@ command! TomePlayBook call s:playBook()
 
 if !exists("g:tome_no_mappings")
 
-  nmap <Leader>u <Plug>(TomePlayLine)
-  nmap <Leader>U <Plug>(TomePlayParagraph)
-  xmap <Leader>u <Plug>(TomePlaySelection)
+  nmap <Leader>p <Plug>(TomePlayLine)
+  nmap <Leader>P <Plug>(TomePlayParagraph)
+  xmap <Leader>p <Plug>(TomePlaySelection)
 
 endif
 

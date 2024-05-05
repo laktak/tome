@@ -28,7 +28,7 @@ convert input.jpg -crop 200x200+50+50 output.jpg
 convert input.jpg -rotate 90 output.jpg
 ```
 
-You can send (execute) the commands to the target, which is a tmux pane following the playbook. Usually you use `Enter` to execute one line. It's also possible to execute a selection or paragraph.
+You can send (execute) the commands to the target, which is a tmux pane following the playbook. Usually you use `Enter` to execute one line. It's also possible to execute a selection or paragraph (`<Leader>p` and `<Leader>P`).
 
 Treat your playbook like notes for a project. Unlike your shell history you can start a docker container, open a database client or even ssh to a remote system and then proceed to send commands to the executing application.
 
@@ -102,9 +102,9 @@ Reload the tmux environment:
 
 By default Tome has the following mappings:
 
-    nmap <Leader>u <Plug>(TomePlayLine)
-    nmap <Leader>U <Plug>(TomePlayParagraph)
-    xmap <Leader>u <Plug>(TomePlaySelection)
+    nmap <Leader>p <Plug>(TomePlayLine)
+    nmap <Leader>P <Plug>(TomePlayParagraph)
+    xmap <Leader>p <Plug>(TomePlaySelection)
 
 If you prefer to create them yourself set
 
@@ -112,7 +112,7 @@ If you prefer to create them yourself set
 
 Tome has a no send list to avoid accidentially sending input to a tui application. By default this includes `lf` (the file manager) and `vim`. Set your own list with
 
-    let g:tome_no_send = ['vim', 'lf']
+    let g:tome_no_send = ['vim', 'lf', 'gitui']
 
 
 ### tmux options
@@ -121,7 +121,7 @@ You can set any of these options by adding them to your `~/.tmux.conf` file:
 
     set -g <option> "<value>"
 
-Where `<option>` and `<value>` are one of the specified below
+Where `<option>` and `<value>` correspond to one of the options specified below
 
 ### Keys
 
@@ -130,6 +130,4 @@ Where `<option>` and `<value>` are one of the specified below
 | `@tome_key`            | `p`             | The key binding to open a tome playbook. |
 | `@tome_height`         | `8`             | Height of the playbook vertial split. |
 | `@tome_playbook`       | `.playbook.sh`  | Name of the playbook to open. |
-
-
 
