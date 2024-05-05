@@ -93,7 +93,8 @@ nnoremap <silent> <Plug>(TomePlayParagraph) :<C-U>call <SID>playParagraph()<CR>
 xnoremap <silent> <Plug>(TomePlaySelection) :<C-U>call <SID>playSel()<CR>
 
 command! TomePlayBook call s:mapBufferCRToPlay()
-command! -nargs=? TomeScratchPad call s:markScratch(<q-args>)
+command! -nargs=? TomeScratchPad call s:markScratch(<q-args>)|call s:mapBufferCRToPlay()
+command! -nargs=? TomeScratchPadOnly call s:markScratch(<q-args>)
 
 
 if !exists("g:tome_no_mappings")

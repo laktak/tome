@@ -5,9 +5,9 @@ INTRODUCTION                                    *tome*
 Tome allows to to manage playbooks for you terminal in combination with vim and tmux.
 
 
-PLAYBOOK                                        *:TomePlayBook*
+PLAYBOOK
 
-Usually invoked by a tmux mapping to open Tome in playbook mode.
+Usually invoked by a tmux mapping to open Tome in playbook mode. See |TomePlayBook|.
 
 For more information and setup with tmux go to https://github.com/laktak/tome
 
@@ -20,16 +20,20 @@ Default mappings                                *tome-default-mappings*
 <Leader>P               Play the current paragraph to the next (or [count]
                         offset) tmux pane.
 
-Enter                   When in playbook mode, execute `<Leader>p`.
-                        See |:TomePlayBook|.
+<Enter>                 When in playbook mode, execute `<Leader>p`.
+                        Activated by |TomePlayBook|.
 
 
 COMMANDS                                        *TomeCommands*
 
-*:TomePlayBook*         Set the current buffer to playbook mode by mapping `Enter`.
+*TomePlayBook*          Set the current buffer to playbook mode by mapping `<Enter>`.
 
-*:TomeScratchPad* [name]
+*TomeScratchPad* [name]
                         Set the current buffer as a scratch pad that will be discarded
-                        when exiting vim.
+                        when exiting vim and map `<Enter>`.
+
+*TomeScratchPadOnly* [name]
+                        Like |TomeScratchPad| but do not map `<Enter>`.
+
 
  vim:tw=78:ts=8:ft=help:norl:
