@@ -3,6 +3,8 @@
 
 Playbooks for your Terminal AKA "Your history is history!"
 
+![intro](https://github.com/laktak/tome/wiki/assets/intro1.gif)
+
 TOME is a notcronym for tmux-vim-terminal-playbooks and maybe slightly better than "TVITP".
 
 - [Goals](#goals)
@@ -55,7 +57,9 @@ Treat your playbook like notes for a project. Unlike your shell history you can 
     insert into foo(bar, result) values('blue', 42);
 
 
-While playbooks are organized by projects in folders, the target's location can be anywhere. You can also make any document into a temporary playbook by using the `<Leader>p` key bindings or enabling `<Enter>` with the `:TomePlayBook` command.
+While playbooks are organized by projects in folders, the target's location can be anywhere.
+
+You can also make any document (like this README) into a temporary playbook by using the `<Leader>p` key bindings or enabling `<Enter>` with the `:TomePlayBook` command.
 
 
 Tome does not use variables because your shell already supports them.
