@@ -1,11 +1,18 @@
 
-# 🔁 TOME
+# 🔁 TOME Playbooks
 
-Playbooks for your Terminal AKA "Your history is history!"
+Playbooks are interactive scripts that keep your recurring commands (or what you would otherwise search for in the bash history).
+
+But playbooks are not just for bash, you can run them in any terminal application:
+
+- any shell like bash, fish or zsh
+- on all your servers with ssh
+- in a database client (like postgres, sqlite, mysql, etc.)
+- inside a docker container
+
+all without any further setup.
 
 ![intro](https://github.com/laktak/tome/wiki/assets/intro1.gif)
-
-TOME is a notcronym for tmux-vim-terminal-playbooks and maybe slightly better than "TVITP".
 
 - [Goals](#goals)
 - [Introduction](#introduction)
@@ -27,7 +34,7 @@ TOME is a notcronym for tmux-vim-terminal-playbooks and maybe slightly better th
 
 ## Introduction
 
-After installing the plugins, press `<tmux-prefix> p`, this will split the current pane vertically and create or open a playbook in vim.
+After installing the plugins, press `<tmux-prefix> p` (default binding), this will split the current pane vertically and create or open a playbook in vim.
 
 A playbook is a mixture of command history and script. It contains a list of commands that you can execute interactively in any order for any terminal application.
 
@@ -83,7 +90,7 @@ When you want multiple playbooks in a project just prefix them with `.playbook-`
 ## Requirements
 
 - tmux
-- vim
+- vim or neovim
 - any REPL, e.g. bash, a database client, etc.
 
 ## Installation
