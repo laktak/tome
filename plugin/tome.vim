@@ -9,6 +9,65 @@ if !exists("g:tome_no_send")
   let g:tome_no_send = ['vim', 'lf', 'gitui']
 endif
 
+if !exists("g:tome_vars")
+  let g:tome_vars = 1
+endif
+
+let s:vars = {}
+
+function! TomeSetVar(name, value)
+  if g:tome_vars
+    let s:vars[a:name]=a:value
+  endif
+endfunction
+
+function! TomeGetVars()
+  if g:tome_vars
+    return s:vars
+  else
+    return {}
+  endif
+endfunction
+
+function! s:tomeSubstituteVars(text)
+  if !g:tome_vars | return a:text | endif
+  let result = a:text
+  let uvars = {}
+  " set $<NAME>=
+  let lines = split(a:text, "\n")
+  while 1
+    let idx = match(lines, '^\$<\i\+>=.*$')
+    if idx < 0 | break | endif
+    let line = lines[idx]
+    let varname = matchstr(line, '\(\$<\)\@<=\i\+\(>=\)\@=')
+    let value = matchstr(line, '\([^=]\+=\)\@<=.*$')
+    let s:vars[varname] = value
+    let lines = slice(lines, 0, idx) + slice(lines, idx + 1)
+  endwhile
+  if len(lines) == 0 | return "" | endif
+  let result = join(lines, "\n") . "\n"
+  " subst $<NAME>
+  while 1
+    let varname = matchstr(result, '\$<\i\+>')
+    if varname == "" | break | endif
+    let varname = varname[2:-2]
+    if has_key(s:vars, varname)
+      let value = s:vars[varname]
+    else
+      let value = ''
+      let uvars[varname] = ''
+    endif
+    let result = substitute(result, '\$<' . varname . '>', value, 'g')
+  endwhile
+  " remove escapes
+  let result = substitute(result, '\$<<\(\i\+\)>', '\$<\1>', 'g')
+  if len(uvars) == 0
+    return result
+  else
+    return keys(uvars)
+  endif
+endfunction
+
 function! s:getVisualSelection()
   try
     let oldA = @a
@@ -57,16 +116,29 @@ function! s:sendTmuxCommand(targetOffset, text)
   silent call system(cmd)
 endfunction
 
+function! s:prepAndSendTmuxCommand(targetOffset, text)
+  let res = s:tomeSubstituteVars(a:text)
+  if type(res) == v:t_list
+    enew
+    call s:markScratch("vars")
+    call s:mapBufferCRToPlay()
+    let x = "# please define the following tome variables\n" . join(map(res, {idx, val -> '$<' . val . '>='}), "\n")."\n"
+    silent! put =x
+  else
+    call s:sendTmuxCommand(a:targetOffset, res)
+  endif
+endfunction
+
 function! s:playLine()
-  call s:sendTmuxCommand(v:count, getline(".")."\r")
+  call s:prepAndSendTmuxCommand(v:count, getline(".")."\n")
 endfunction
 
 function! s:playSel()
-  call s:sendTmuxCommand(v:count, s:getVisualSelection())
+  call s:prepAndSendTmuxCommand(v:count, s:getVisualSelection())
 endfunction
 
 function! s:playParagraph()
-  call s:sendTmuxCommand(v:count, s:getParagraph() . "\n")
+  call s:prepAndSendTmuxCommand(v:count, s:getParagraph() . "\n")
 endfunction
 
 function! s:mapBufferCRToPlay()

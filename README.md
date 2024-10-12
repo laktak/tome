@@ -71,17 +71,37 @@ While playbooks are organized by projects in folders, the target's location can 
 You can also make any document (like this README) into a temporary playbook by using the `<Leader>p` key bindings or enabling `<Enter>` with the `:TomePlayBook` command.
 
 
-Tome does not use variables because your shell already supports them.
+Your shell already has variables so typically you would not need them in Tome.
 
-    # get an auth token, set base
+    # this Bash example defines BASE with a constant
     export BASE=http://localhost:8080
+    # and TOKEN using a shell script
     export TOKEN=$(token-request)
-    # define a call function with defaults for httpie
+    # "call" can be another script or defined directly in Tome:
     call() { http -A bearer -a $TOKEN "$@"; }
 
+    # use everything together
     id=$(call $BASE/car name==foostang | jq .[0].id)
     call $BASE/car/$id
     call PUT $BASE/car/$id color=blue
+
+
+If you prefer, or if the target has no variables, you can use Tome variables (string replacement only)
+
+- Variables are enclosed in `$<` and `>`, like `$<foo>`.
+- Variables are defined with `$<NAME>=VALUE`, like `$<foo>=some text`.
+- Any variable is replaced with its defined value, no other operations are performed.
+- If a variable is undefined Tome will open a scratchpad with the missing variables.
+- To escape the text `$<text>` use `$<<text>`
+
+    # set a BASE variable
+    $<base>=http://localhost:8080
+    # use in a command
+    echo $<base>
+    # undefined variables open a scratchpad
+    echo $<foo>
+    # escaped, not a variable
+    echo "$<<foo>"
 
 
 If you want a temporary scratch pad press `<tmux-prefix> P`. It is also a good idea to paste commands here instead of directly into the terminal.
@@ -156,6 +176,10 @@ Tome has a no send list to avoid accidentially sending input to a tui applicatio
 If you do not want to automatically open `.playbook*` files as playbooks you can set
 
     let g:tome_no_auto = 1
+
+Tome variable support can be disabled with
+
+    let g:tome_vars = 0
 
 
 ### tmux options
