@@ -91,7 +91,7 @@ If you prefer, or if the target has no variables, you can use Tome variables (st
 - Variables are enclosed in `$<` and `>`, like `$<foo>`.
 - Variables are defined with `$<NAME>=VALUE`, like `$<foo>=some text`.
 - Any variable is replaced with its defined value, no other operations are performed.
-- If a variable is undefined Tome will open a scratchpad with the missing variables.
+- If a variable is undefined Tome will open a scratchpad with the missing variables. Don't forget to send the values with `<Enter>`!
 - To escape the text `$<text>` use `$<<text>`
 
     # set a BASE variable
