@@ -22,9 +22,11 @@ Con:
 - [Installation](#installation)
   - [vim plugin](#vim-plugin)
   - [tmux plugin](#tmux-plugin)
+- [Scripting](#scripting)
 - [Configuration](#configuration)
   - [vim options](#vim-options)
   - [tmux options](#tmux-options)
+
 
 ## Goals
 
@@ -152,6 +154,16 @@ Reload the tmux environment:
 
     # type this in terminal
     $ tmux source-file ~/.tmux.conf
+
+
+## Scripting
+
+If you want to open a playbook from a script you can use the `tome-open-playbook` command. It can be found where you installed the tmux plugin.
+
+    Usage: tome-open-playbook [-s] [-l height]
+
+- `-s` will open a scratchpad
+- `-l` allows you to specify a height
 
 
 ## Configuration

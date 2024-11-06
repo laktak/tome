@@ -1,17 +1,29 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 get_option() {
-	local res=$(tmux show-option -gqv "$1")
+	res=$(tmux show-option -gqv "$1")
 	echo "${res:-$2}"
 }
 
 tome_height=$(get_option "@tome_height" 8)
 tome_playbook=$(get_option "@tome_playbook" .playbook.sh)
+scratchpad=0
 
-if [ "$1" = "-s" ]; then
+while getopts 'sl:h' opt; do
+	case "$opt" in
+	s) scratchpad=1 ;;
+	l) tome_height=$OPTARG ;;
+	*)
+		echo "Usage: $(basename "$0") [-s] [-l height]"
+		exit 1
+		;;
+	esac
+done
+
+if [ $scratchpad = 1 ]; then
 	# open scratchpad
-	tmux split-window -c '#{pane_current_path}' -vb -l $tome_height "vim -c TomeScratchPad"
+	tmux split-window -c '#{pane_current_path}' -vb -l "$tome_height" "vim -c TomeScratchPad"
 else
 	# open tome playbook
-	tmux split-window -c '#{pane_current_path}' -vb -l $tome_height "vim -c TomePlayBook $tome_playbook"
+	tmux split-window -c '#{pane_current_path}' -vb -l "$tome_height" "vim -c TomePlayBook $tome_playbook"
 fi
