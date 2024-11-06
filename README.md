@@ -86,7 +86,7 @@ Your shell already has variables so typically you would not need them in Tome.
     call PUT $BASE/car/$id color=blue
 
 
-If you prefer, or if the target has no variables, you can use Tome variables (string replacement only)
+If you prefer, or if the target has no variables, you can use Tome variables (string replacement only).
 
 - Variables are enclosed in `$<` and `>`, like `$<foo>`.
 - Variables are defined with `$<NAME>=VALUE`, like `$<foo>=some text`.

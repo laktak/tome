@@ -36,4 +36,24 @@ COMMANDS                                        *TomeCommands*
                         Like |TomeScratchPad| but do not map `<Enter>`.
 
 
+VARIABLES                                       *TomeVariables*
+
+
+Your shell already has variables so typically you would not need them in Tome. However,
+if you prefer, or if the target has no variables, you can use Tome variables (string
+replacement only).
+
+
+$<NAME>=VALUE
+                        Define a new variable called NAME.
+
+$<NAME>
+                        Any variable is replaced with its defined value, no other
+                        operations are performed. If a variable is undefined Tome
+                        will open a scratchpad with the missing variables.
+
+$<<NAME>
+                        Escape, results in the literal string $<NAME>.
+
+
  vim:tw=78:ts=8:ft=help:norl:
