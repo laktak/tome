@@ -30,8 +30,9 @@ function! TomeGetVars()
 endfunction
 
 function! s:tomeSubstituteVars(text)
-  if !g:tome_vars | return a:text | endif
+  if !g:tome_vars | return [a:text, [], []] | endif
   let result = a:text
+  let setvars = []
   let uvars = {}
   " set $<NAME>=
   let lines = split(a:text, "\n")
@@ -42,9 +43,10 @@ function! s:tomeSubstituteVars(text)
     let varname = matchstr(line, '\(\$<\)\@<=\i\+\(>=\)\@=')
     let value = matchstr(line, '\([^=]\+=\)\@<=.*$')
     let s:vars[varname] = value
+    call add(setvars, varname)
     let lines = slice(lines, 0, idx) + slice(lines, idx + 1)
   endwhile
-  if len(lines) == 0 | return "" | endif
+  if len(lines) == 0 | return ["", [], setvars] | endif
   let result = join(lines, "\n") . "\n"
   " subst $<NAME>
   while 1
@@ -62,9 +64,9 @@ function! s:tomeSubstituteVars(text)
   " remove escapes
   let result = substitute(result, '\$<<\(\i\+\)>', '\$<\1>', 'g')
   if len(uvars) == 0
-    return result
+    return [result, [], setvars]
   else
-    return keys(uvars)
+    return ["", keys(uvars), []]
   endif
 endfunction
 
@@ -117,15 +119,29 @@ function! s:sendTmuxCommand(targetOffset, text)
 endfunction
 
 function! s:prepAndSendTmuxCommand(targetOffset, text)
-  let res = s:tomeSubstituteVars(a:text)
-  if type(res) == v:t_list
+  let [cmd, missing, setvars] = s:tomeSubstituteVars(a:text)
+  let message = ""
+  if len(missing) > 0
     enew
     call s:markScratch("vars")
     call s:mapBufferCRToPlay()
-    let x = "# please define the following tome variables\n" . join(map(res, {idx, val -> '$<' . val . '>='}), "\n")."\n"
+    let x = "# please define the following tome variables\n" . join(map(missing, {idx, val -> '$<' . val . '>='}), "\n")."\n"
     silent! put =x
-  else
-    call s:sendTmuxCommand(a:targetOffset, res)
+  elseif cmd != ""
+    call s:sendTmuxCommand(a:targetOffset, cmd)
+    let message = "sent"
+  endif
+  if len(setvars) > 0
+    if message != ""
+      let message = message . "/"
+    endif
+    let message = message . "set tome var: " . join(setvars, ", ")
+  endif
+  if message != ""
+    if len(message) > 60
+      let message = strpart(message, 0, 57) . "..."
+    endif
+    echo message
   endif
 endfunction
 
