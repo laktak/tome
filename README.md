@@ -11,11 +11,12 @@ Playbooks are a simple but powerful tool for your shell and terminal apps.
 
 ![intro](https://github.com/laktak/tome/wiki/assets/intro1.gif)
 
+
 - [Introduction](#introduction)
 - [Requirements](#requirements)
 - [Installation](#installation)
   - [vim plugin](#vim-plugin)
-  - [tmux plugin](#tmux-plugin)
+  - [tmux plugin (optional)](#tmux-plugin-optional)
 - [Scripting](#scripting)
 - [Configuration](#configuration)
   - [vim options](#vim-options)
@@ -41,18 +42,20 @@ You can send (execute) the commands to the target, which is a tmux pane followin
 
 Treat your playbook like notes for a project. Unlike your shell history you can start a docker container, open a database client or even ssh to a remote system and then proceed to send commands to the executing application.
 
-    # connect remote
-    ssh myserver
+```
+# connect remote
+ssh myserver
 
-    # run psql
-    psql "host=localhost port=5432 dbname=postgres user=pg password=pg sslmode=disable"
-    psql "host=dbserver port=5432 dbname=postgres user=pg password=pg"
+# run psql
+psql "host=localhost port=5432 dbname=postgres user=pg password=pg sslmode=disable"
+psql "host=dbserver port=5432 dbname=postgres user=pg password=pg"
 
-    # run a query
-    select * from foo where bar='red';
+# run a query
+select * from foo where bar='red';
 
-    # insert data etc.
-    insert into foo(bar, result) values('blue', 42);
+# insert data etc.
+insert into foo(bar, result) values('blue', 42);
+```
 
 
 While playbooks are organized by projects in folders, the target's location can be anywhere (meaning you can include a `cd` to another location in your playbook).
@@ -62,18 +65,19 @@ You can also make any document (like this README) into a temporary playbook by u
 
 Your shell already has variables so typically you would not need them in Tome.
 
-    # this Bash example defines BASE with a constant
-    export BASE=http://localhost:8080
-    # and TOKEN using a shell script
-    export TOKEN=$(token-request)
-    # "call" can be another script or defined directly in Tome:
-    call() { http -A bearer -a $TOKEN "$@"; }
+```
+# this Bash example defines BASE with a constant
+export BASE=http://localhost:8080
+# and TOKEN using a shell script
+export TOKEN=$(token-request)
+# "call" can be another script or defined directly in Tome:
+call() { http -A bearer -a $TOKEN "$@"; }
 
-    # use everything together
-    id=$(call $BASE/car name==foostang | jq .[0].id)
-    call $BASE/car/$id
-    call PUT $BASE/car/$id color=blue
-
+# use everything together
+id=$(call $BASE/car name==foostang | jq .[0].id)
+call $BASE/car/$id
+  call PUT $BASE/car/$id color=blue
+```
 
 If you prefer, or if the target has no variables, you can use Tome variables (string replacement only).
 
@@ -83,15 +87,16 @@ If you prefer, or if the target has no variables, you can use Tome variables (st
 - If a variable is undefined Tome will open a scratchpad with the missing variables. Don't forget to send the values with `<Enter>`!
 - To escape the text `$<text>` use `$<<text>`
 
-    # set a BASE variable
-    $<base>=http://localhost:8080
-    # use in a command
-    echo $<base>
-    # undefined variables open a scratchpad
-    echo $<foo>
-    # escaped, not a variable
-    echo "$<<foo>"
-
+```
+# set a BASE variable
+$<base>=http://localhost:8080
+# use in a command
+echo $<base>
+# undefined variables open a scratchpad
+echo $<foo>
+# escaped, not a variable
+echo "$<<foo>"
+```
 
 On tmux: if you want a temporary scratch pad press `<tmux-prefix> P`. It is also a good idea to paste commands here instead of directly into the terminal.
 
@@ -113,42 +118,56 @@ Add laktak/tome to your favorite plugin manager.
 
 E.g. for [vim-plug](https://github.com/junegunn/vim-plug/) place this in your .vimrc:
 
-    Plug 'laktak/tome'
+```
+Plug 'laktak/tome'
+```
 
 then run the following in Vim:
 
-    :source %
-    :PlugInstall
+```
+:source %
+:PlugInstall
+```
 
 
 ### tmux plugin (optional)
 
 To install Tome with the [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm) simply add the plugin to the list of TPM plugins in `.tmux.conf`:
 
-    set -g @plugin 'laktak/tome'
+```
+set -g @plugin 'laktak/tome'
+```
 
 then and hit `<tmux-prefix> I` to fetch the plugin and source it.
 
 
 To install it manually, first clone the repo:
 
-    $ git clone https://github.com/laktak/tome ~/.tmux/tome
+```
+$ git clone https://github.com/laktak/tome ~/.tmux/tome
+```
 
 Add this line to the bottom of `.tmux.conf`:
 
-    run-shell ~/.tmux/tome/tome.tmux
+```
+run-shell ~/.tmux/tome/tome.tmux
+```
 
 Reload the tmux environment:
 
-    # type this in terminal
-    $ tmux source-file ~/.tmux.conf
+```
+# type this in terminal
+$ tmux source-file ~/.tmux.conf
+```
 
 
 ## Scripting
 
 If you want to open a playbook from a script you can use the `tome-open-playbook` command. It can be found where you installed the tmux plugin.
 
-    Usage: tome-open-playbook [-s] [-l height]
+```
+Usage: tome-open-playbook [-s] [-l height]
+```
 
 - `-s` will open a scratchpad
 - `-l` allows you to specify a height
@@ -161,9 +180,11 @@ If you want to open a playbook from a script you can use the `tome-open-playbook
 
 By default Tome has the following mappings:
 
-    nmap <Leader>p <Plug>(TomePlayLine)
-    nmap <Leader>P <Plug>(TomePlayParagraph)
-    xmap <Leader>p <Plug>(TomePlaySelection)
+```
+nmap <Leader>p <Plug>(TomePlayLine)
+nmap <Leader>P <Plug>(TomePlayParagraph)
+xmap <Leader>p <Plug>(TomePlaySelection)
+```
 
 See `help TomeConfig` in Vim to change them and for more options.
 
@@ -172,7 +193,9 @@ See `help TomeConfig` in Vim to change them and for more options.
 
 You can set any of these options by adding them to your `~/.tmux.conf` file:
 
-    set -g <option> "<value>"
+```
+set -g <option> "<value>"
+```
 
 Where `<option>` and `<value>` correspond to one of the options specified below
 
