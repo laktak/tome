@@ -1,22 +1,16 @@
 
 # 🔁 TOME Playbooks
 
-Playbooks are a simple but powerful tool to manage recurring (shell) commands.
+Playbooks are a simple but powerful tool for your shell and terminal apps.
 
-Instead of using the built-in history you write your commands in VIM.
-
-Pro:
-- your commands live in a text file and you don't have to search the history
-- you can have a playbook per project or manage them however you like
-- playbooks are not just for the shell, they can also send commands into a ssh session, into a docker container, a sql client, etc.
-
-Con:
-- you need to change your habits - fortunately TOME makes this very easy
-
+1. Replaces your command history, organized by project
+2. Allows interactive scripting
+3. Allows you to add notes - we may even call it documentation ;)
+4. Enhances your shell prompt with Vim
+5. Built for tmux or the Vim terminal
 
 ![intro](https://github.com/laktak/tome/wiki/assets/intro1.gif)
 
-- [Goals](#goals)
 - [Introduction](#introduction)
 - [Requirements](#requirements)
 - [Installation](#installation)
@@ -28,19 +22,12 @@ Con:
   - [tmux options](#tmux-options)
 
 
-## Goals
-
-- Provide a list of commands to execute (a "playbook").
-- Easily execute these commands in any REPL (a system shell, ssh, a database client, etc.)
-- Manage these playbooks per project.
-- Bonus: completely replace the shell command history.
-
-
 ## Introduction
 
-After installing the tmux and vim plugins, press `<tmux-prefix> p` (default binding), this will split the current pane vertically and create or open a playbook in vim.
+- With tmux: press `<tmux-prefix> p` (default binding), this will split the current pane vertically and create or open a playbook in vim
+- With Vim only: run `vim .playbook.sh` or open a playbook file
 
-A playbook is a mixture of command history and script. It contains a list of commands that you can execute interactively in any order for any terminal application.
+A playbook is a mixture of command history, script and documentation. You can structure it however you like. On any line that you want to send to the terminal just press enter. This can be any shell but also a terminal application like a SQL client or ssh to a remote server.
 
 ```
 ls *.jpg
@@ -68,7 +55,7 @@ Treat your playbook like notes for a project. Unlike your shell history you can 
     insert into foo(bar, result) values('blue', 42);
 
 
-While playbooks are organized by projects in folders, the target's location can be anywhere.
+While playbooks are organized by projects in folders, the target's location can be anywhere (meaning you can include a `cd` to another location in your playbook).
 
 You can also make any document (like this README) into a temporary playbook by using the `<Leader>p` key bindings or enabling `<Enter>` with the `:TomePlayBook` command.
 
@@ -106,16 +93,17 @@ If you prefer, or if the target has no variables, you can use Tome variables (st
     echo "$<<foo>"
 
 
-If you want a temporary scratch pad press `<tmux-prefix> P`. It is also a good idea to paste commands here instead of directly into the terminal.
+On tmux: if you want a temporary scratch pad press `<tmux-prefix> P`. It is also a good idea to paste commands here instead of directly into the terminal.
 
 When you want multiple playbooks in a project just prefix them with `.playbook-`, e.g. `.playbook-db.sql` with the correct extension to get syntax highlighting.
 
 
 ## Requirements
 
-- tmux
 - vim or neovim
 - any REPL, e.g. bash, a database client, etc.
+- tmux optional (but recommended)
+
 
 ## Installation
 
@@ -133,7 +121,7 @@ then run the following in Vim:
     :PlugInstall
 
 
-### tmux plugin
+### tmux plugin (optional)
 
 To install Tome with the [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm) simply add the plugin to the list of TPM plugins in `.tmux.conf`:
 
@@ -177,21 +165,7 @@ By default Tome has the following mappings:
     nmap <Leader>P <Plug>(TomePlayParagraph)
     xmap <Leader>p <Plug>(TomePlaySelection)
 
-If you prefer to create them yourself set
-
-    let g:tome_no_mappings = 1
-
-Tome has a no send list to avoid accidentially sending input to a tui application. By default this includes `lf` (the file manager) and `vim`. Set your own list with
-
-    let g:tome_no_send = ['vim', 'lf', 'gitui']
-
-If you do not want to automatically open `.playbook*` files as playbooks you can set
-
-    let g:tome_no_auto = 1
-
-Tome variable support can be disabled with
-
-    let g:tome_vars = 0
+See `help TomeConfig` in Vim to change them and for more options.
 
 
 ### tmux options
@@ -208,6 +182,5 @@ Where `<option>` and `<value>` correspond to one of the options specified below
 | `@tome_scratch_key`    | `P`             | The key binding to open a Tome scratchpad. |
 | `@tome_height`         | `8`             | Height of the playbook vertial split. |
 | `@tome_playbook`       | `.playbook.sh`  | Name of the playbook to open. |
-
 
 
