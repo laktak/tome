@@ -13,6 +13,10 @@ if !exists("g:tome_vars")
   let g:tome_vars = 1
 endif
 
+if !exists("g:tome_target")
+  let g:tome_target = ''
+endif
+
 let s:vars = {}
 
 function! TomeSetVar(name, value)
@@ -118,7 +122,37 @@ function! s:sendTmuxCommand(targetOffset, text)
   silent call system(cmd)
 endfunction
 
-function! s:prepAndSendTmuxCommand(targetOffset, text)
+function! s:sendTerminalCommand(targetOffset, text)
+  let current_win = winnr()
+  let current_buf = bufnr('%')
+  let terminal_buffers = []
+  for buf in range(1, bufnr('$'))
+    if getbufvar(buf, "&buftype") == 'terminal'
+      call add(terminal_buffers, buf)
+    endif
+  endfor
+
+  if a:targetOffset >= 0 && a:targetOffset < len(terminal_buffers)
+    let terminal_buf = terminal_buffers[a:targetOffset]
+  else
+    " new terminal buffer
+    terminal
+    let terminal_buf = bufnr('%')
+  endif
+
+  call term_sendkeys(terminal_buf, a:text)
+  exe current_win . 'wincmd w'
+endfunction
+
+function! s:getTarget()
+  if index(['vim', 'tmux'], g:tome_target) < 0
+    " detect tmux
+    let g:tome_target = $TMUX_PANE!='' ? 'tmux' : 'vim'
+  endif
+  return g:tome_target
+endfunction
+
+function! s:prepAndSendCommand(targetOffset, text)
   let [cmd, missing, setvars] = s:tomeSubstituteVars(a:text)
   let message = ""
   if len(missing) > 0
@@ -128,7 +162,11 @@ function! s:prepAndSendTmuxCommand(targetOffset, text)
     let x = "# please define the following tome variables\n" . join(map(missing, {idx, val -> '$<' . val . '>='}), "\n")."\n"
     silent! put =x
   elseif cmd != ""
-    call s:sendTmuxCommand(a:targetOffset, cmd)
+    if s:getTarget() == 'vim'
+      call s:sendTerminalCommand(a:targetOffset, cmd)
+    else
+      call s:sendTmuxCommand(a:targetOffset, cmd)
+    endif
     let message = "sent"
   endif
   if len(setvars) > 0
@@ -146,15 +184,15 @@ function! s:prepAndSendTmuxCommand(targetOffset, text)
 endfunction
 
 function! s:playLine()
-  call s:prepAndSendTmuxCommand(v:count, getline(".")."\n")
+  call s:prepAndSendCommand(v:count, getline(".")."\n")
 endfunction
 
 function! s:playSel()
-  call s:prepAndSendTmuxCommand(v:count, s:getVisualSelection())
+  call s:prepAndSendCommand(v:count, s:getVisualSelection())
 endfunction
 
 function! s:playParagraph()
-  call s:prepAndSendTmuxCommand(v:count, s:getParagraph() . "\n")
+  call s:prepAndSendCommand(v:count, s:getParagraph() . "\n")
 endfunction
 
 function! s:mapBufferCRToPlay()

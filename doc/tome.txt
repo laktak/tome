@@ -2,26 +2,32 @@
 
 INTRODUCTION                                    *tome*
 
-Tome allows to to manage playbooks for you terminal in combination with vim and tmux.
+Tome allows to to manage playbooks for you terminal in either inside Vim or with tmux.
 
 
 PLAYBOOK
 
-Usually invoked by a tmux mapping to open Tome in playbook mode. See |TomePlayBook|.
+Playbook mode is automatically activated for any file named `.playbook*`. When you
+open tome from tmux this happens automatically. See |TomePlayBook|.
 
 For more information and setup with tmux go to https://github.com/laktak/tome
+
+In the help below, target refers either to a `tmux pane` or the `Vim terminal`
+depending on your configuration.
 
 
 Default mappings                                *tome-default-mappings*
 
 <Leader>p               Play the current line in normal mode or the selection
-                        to the next (or [count] offset) tmux pane.
+                        to the next (or [count] offset) target.
 
 <Leader>P               Play the current paragraph to the next (or [count]
-                        offset) tmux pane.
+                        offset) target.
 
 <Enter>                 When in playbook mode, execute `<Leader>p`.
                         Activated by |TomePlayBook|.
+
+To change these mappings see |TomeConfig|.
 
 
 COMMANDS                                        *TomeCommands*
@@ -30,7 +36,7 @@ COMMANDS                                        *TomeCommands*
 
 *TomeScratchPad* [name]
                         Set the current buffer as a scratch pad that will be discarded
-                        when exiting vim and map `<Enter>`.
+                        when exiting Vim and map `<Enter>`.
 
 *TomeScratchPadOnly* [name]
                         Like |TomeScratchPad| but do not map `<Enter>`.
@@ -54,6 +60,49 @@ $<NAME>
 
 $<<NAME>
                         Escape, results in the literal string $<NAME>.
+
+
+CONFIGURATION                                    *TomeConfig*
+
+You can tell tome to either use tmux or the Vim terminal to execute commands. If the
+`g:tome_target` variable is not set, tome will use tmux if it is installed.
+
+```
+" use Vim
+let g:tome_target = 'vim'
+" use tmux
+let g:tome_target = 'tmux'
+```
+
+
+You can disable the default keybindings with the `g:tome_no_mappings` option. It needs
+to be defined before tome is loaded.
+
+```
+let g:tome_no_mappings = 1
+```
+
+Then add your own mappings:
+
+```
+nmap <Leader>p <Plug>(TomePlayLine)
+nmap <Leader>P <Plug>(TomePlayParagraph)
+xmap <Leader>p <Plug>(TomePlaySelection)
+```
+
+
+You can prevent tome to send commands to certain terminal apps. The defaults are:
+
+```
+let g:tome_no_send = ['vim', 'lf', 'gitui']
+```
+
+
+Tome variable support can be disabled with
+
+```
+let g:tome_vars = 0
+```
 
 
  vim:tw=78:ts=8:ft=help:norl:
