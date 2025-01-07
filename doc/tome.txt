@@ -75,6 +75,15 @@ let g:tome_target = 'tmux'
 ```
 
 
+Tome will skip `$ ` at the beginning of a line because that is often used in markdown
+to indicate a shell command. You can adjust this prefix or disable it with '' (needs
+g:tome_vars enabled).
+
+```
+let g:tome_skip_prefix = '^\$\s\+'
+```
+
+
 You can disable the default keybindings with the `g:tome_no_mappings` option. It needs
 to be defined before tome is loaded.
 

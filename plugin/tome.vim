@@ -17,6 +17,10 @@ if !exists("g:tome_target")
   let g:tome_target = ''
 endif
 
+if !exists("g:tome_skip_prefix")
+  let g:tome_skip_prefix = '^\$\s\+'
+endif
+
 let s:vars = {}
 
 function! TomeSetVar(name, value)
@@ -39,17 +43,21 @@ function! s:tomeSubstituteVars(text)
   let setvars = []
   let uvars = {}
   " set $<NAME>=
-  let lines = split(a:text, "\n")
-  while 1
-    let idx = match(lines, '^\$<\i\+>=.*$')
-    if idx < 0 | break | endif
-    let line = lines[idx]
-    let varname = matchstr(line, '\(\$<\)\@<=\i\+\(>=\)\@=')
-    let value = matchstr(line, '\([^=]\+=\)\@<=.*$')
-    let s:vars[varname] = value
-    call add(setvars, varname)
-    let lines = slice(lines, 0, idx) + slice(lines, idx + 1)
-  endwhile
+  let lines = []
+  for line in split(a:text, "\n")
+    if match(line, '^\$<\i\+>=.*$') == 0
+      let varname = matchstr(line, '\(\$<\)\@<=\i\+\(>=\)\@=')
+      let value = matchstr(line, '\([^=]\+=\)\@<=.*$')
+      let s:vars[varname] = value
+      call add(setvars, varname)
+    else
+      " remove prefix
+      if g:tome_skip_prefix != ''
+        let line = substitute(line, g:tome_skip_prefix, '', '')
+      endif
+      call add(lines, line)
+    endif
+  endfor
   if len(lines) == 0 | return ["", [], setvars] | endif
   let result = join(lines, "\n") . "\n"
   " subst $<NAME>

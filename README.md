@@ -62,6 +62,8 @@ While playbooks are organized by projects in folders, the target's location can 
 
 You can also make any document (like this README) into a temporary playbook by using the `<Leader>p` key bindings or enabling `<Enter>` with the `:TomePlayBook` command.
 
+Note: the $ indicator at the beginning of a line for shell commands (like in some READMEs) will be ignored so you can run the command directly.
+
 
 Your shell already has variables so typically you would not need them in Tome.
 
@@ -186,7 +188,7 @@ nmap <Leader>P <Plug>(TomePlayParagraph)
 xmap <Leader>p <Plug>(TomePlaySelection)
 ```
 
-See `help TomeConfig` in Vim to change them and for more options.
+[See `help TomeConfig`](doc/tome.txt) in Vim to change them, and for more options.
 
 
 ### tmux options
