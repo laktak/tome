@@ -15,17 +15,17 @@ Playbooks are a simple but powerful tool for your shell and terminal apps.
 - [Introduction](#introduction)
 - [Requirements](#requirements)
 - [Installation](#installation)
-  - [vim plugin](#vim-plugin)
+  - [Vim plugin](#vim-plugin)
   - [tmux plugin (optional)](#tmux-plugin-optional)
 - [Scripting](#scripting)
 - [Configuration](#configuration)
-  - [vim options](#vim-options)
+  - [Vim options](#vim-options)
   - [tmux options](#tmux-options)
 
 
 ## Introduction
 
-- With tmux: press `<tmux-prefix> p` (default binding), this will split the current pane vertically and create or open a playbook in vim
+- With tmux: press `<tmux-prefix> p` (default binding), this will split the current pane vertically and create or open a playbook in Vim
 - With Vim only: run `vim .playbook.sh` or open a playbook file
 
 A playbook is a mixture of command history, script and documentation. You can structure it however you like. On any line that you want to send to the terminal just press enter. This can be any shell but also a terminal application like a SQL client or ssh to a remote server.
@@ -107,18 +107,18 @@ When you want multiple playbooks in a project just prefix them with `.playbook-`
 
 ## Requirements
 
-- vim or neovim
+- Vim or Neovim
 - any REPL, e.g. bash, a database client, etc.
 - tmux optional (but recommended)
 
 
 ## Installation
 
-### vim plugin
+### Vim plugin
 
 Add laktak/tome to your favorite plugin manager.
 
-E.g. for [vim-plug](https://github.com/junegunn/vim-plug/) place this in your .vimrc:
+E.g. for [vim-plug](https://github.com/junegunn/vim-plug/) place this in your `.vimrc`:
 
 ```
 Plug 'laktak/tome'
@@ -178,7 +178,7 @@ Usage: tome-open-playbook [-s] [-l height]
 ## Configuration
 
 
-### vim options
+### Vim options
 
 By default Tome has the following mappings:
 

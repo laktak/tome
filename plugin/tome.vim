@@ -6,7 +6,7 @@ endif
 let g:loaded_tome = 1
 
 if !exists("g:tome_no_send")
-  let g:tome_no_send = ['vim', 'lf', 'gitui']
+  let g:tome_no_send = ['vim', 'nvim', 'lf', 'gitui']
 endif
 
 if !exists("g:tome_vars")
@@ -121,7 +121,6 @@ function! s:sendTmuxCommand(targetOffset, text)
   else
     let proc = split(panes[0], ':')[1]
     if index(g:tome_no_send, proc) >= 0 && !override
-      echom 'not sending to' proc
       call popup_notification('not sending to '.proc, #{time: 3000, pos: 'center'})
       return
     endif
@@ -144,11 +143,18 @@ function! s:sendTerminalCommand(targetOffset, text)
     let terminal_buf = terminal_buffers[a:targetOffset]
   else
     " new terminal buffer
+    if has("nvim")
+      split
+    endif
     terminal
     let terminal_buf = bufnr('%')
   endif
 
-  call term_sendkeys(terminal_buf, a:text)
+  if !has("nvim")
+    call term_sendkeys(terminal_buf, a:text)
+  else
+    call chansend(terminal_buf, a:text)
+  endif
   exe current_win . 'wincmd w'
 endfunction
 
@@ -247,4 +253,3 @@ if !exists("g:tome_no_auto")
   augroup END
 
 endif
-

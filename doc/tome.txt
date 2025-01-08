@@ -103,7 +103,7 @@ xmap <Leader>p <Plug>(TomePlaySelection)
 You can prevent tome to send commands to certain terminal apps. The defaults are:
 
 ```
-let g:tome_no_send = ['vim', 'lf', 'gitui']
+let g:tome_no_send = ['vim', 'nvim', 'lf', 'gitui']
 ```
 
 
