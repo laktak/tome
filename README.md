@@ -208,6 +208,7 @@ Where `<option>` and `<value>` correspond to one of the options specified below
 | `@tome_key`            | `p`             | The key binding to open a Tome playbook. |
 | `@tome_scratch_key`    | `P`             | The key binding to open a Tome scratchpad. |
 | `@tome_height`         | `8`             | Height of the playbook vertial split. |
+| `@tome_editor`         | detect (n)vim   | Manually set your preferred editor. |
 | `@tome_playbook`       | `.playbook.sh`  | Name of the playbook to open. |
 
 
