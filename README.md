@@ -1,6 +1,8 @@
 
 # 🔁 TOME Playbooks
 
+{ repos & mirrors: [github.com/laktak/tome](https://github.com/laktak/tome/), [codeberg.org/laktak/tome](https://codeberg.org/laktak/tome) }
+
 Playbooks are a simple but powerful tool for your shell and terminal apps.
 
 Tome puts Vim "above", where you write and collect your commands which are then executed, on demand, in the terminal below. Instead of a one line prompt you can edit with Vim and instead of a history you can see all your commands in the document.
