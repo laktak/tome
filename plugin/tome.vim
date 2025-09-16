@@ -134,7 +134,7 @@ function! s:sendTmuxCommand(targetOffset, text)
       return 'not sending to '.proc.' (see config)'
     endif
   endif
-  let cmd = "tmux send-keys -t ".cmdPane." ".shellescape(a:text)
+  let cmd = "tmux send-keys -t ".cmdPane." -l ".shellescape(a:text)
   silent call system(cmd)
   return ''
 endfunction
