@@ -37,6 +37,16 @@ function! TomeGetVars()
   endif
 endfunction
 
+function! s:notify(text)
+  if has("nvim")
+    echohl WarningMsg
+    echom a:text
+    echohl None
+  else
+    call popup_notification(a:text, #{time: 3000, pos: 'center'})
+  endif
+endfunction
+
 function! s:tomeSubstituteVars(text)
   if !g:tome_vars | return [a:text, [], []] | endif
   let result = a:text
@@ -121,12 +131,12 @@ function! s:sendTmuxCommand(targetOffset, text)
   else
     let proc = split(panes[0], ':')[1]
     if index(g:tome_no_send, proc) >= 0 && !override
-      call popup_notification('not sending to '.proc, #{time: 3000, pos: 'center'})
-      return
+      return 'not sending to '.proc.' (see config)'
     endif
   endif
   let cmd = "tmux send-keys -t ".cmdPane." ".shellescape(a:text)
   silent call system(cmd)
+  return ''
 endfunction
 
 function! s:sendTerminalCommand(targetOffset, text)
@@ -156,6 +166,7 @@ function! s:sendTerminalCommand(targetOffset, text)
     call chansend(terminal_buf, a:text)
   endif
   exe current_win . 'wincmd w'
+  return ''
 endfunction
 
 function! s:getTarget()
@@ -177,9 +188,13 @@ function! s:prepAndSendCommand(targetOffset, text)
     silent! put =x
   elseif cmd != ""
     if s:getTarget() == 'vim'
-      call s:sendTerminalCommand(a:targetOffset, cmd)
+      let message = s:sendTerminalCommand(a:targetOffset, cmd)
     else
-      call s:sendTmuxCommand(a:targetOffset, cmd)
+      let message = s:sendTmuxCommand(a:targetOffset, cmd)
+    endif
+    if message != ''
+      call s:notify(message)
+      return
     endif
     let message = "sent"
   endif
