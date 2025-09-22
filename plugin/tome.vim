@@ -69,7 +69,8 @@ function! s:tomeSubstituteVars(text)
     endif
   endfor
   if len(lines) == 0 | return ["", [], setvars] | endif
-  let result = join(lines, "\n") . "\n"
+  " use \r to simulate the <Enter> key
+  let result = join(lines, "\r") . "\r"
   " subst $<NAME>
   while 1
     let varname = matchstr(result, '\$<\i\+>')
