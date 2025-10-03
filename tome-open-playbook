@@ -1,42 +1,67 @@
 #!/bin/sh
 
 get_option() {
-	res=$(tmux show-option -gqv "$1")
-	echo "${res:-$2}"
+  res=$(tmux show-option -gqv "$1")
+  echo "${res:-$2}"
 }
 
-tome_height=$(get_option "@tome_height" 8)
+tome_orientation=$(get_option "@tome_orientation" vertical)
+tome_size=$(tmux show-option -gqv "@tome_size")
+if [ -z "$tome_size" ]; then
+  tome_size=$(get_option "@tome_height" "")
+fi
 tome_playbook=$(get_option "@tome_playbook" .playbook.sh)
 tome_editor=$(get_option "@tome_editor" -)
 scratchpad=0
+orient_override=""
 
-while getopts 'sl:h' opt; do
-	case "$opt" in
-	s) scratchpad=1 ;;
-	l) tome_height=$OPTARG ;;
-	*)
-		echo "Usage: $(basename "$0") [-s] [-l height]"
-		exit 1
-		;;
-	esac
+while getopts 'sl:HV' opt; do
+  case "$opt" in
+    s) scratchpad=1 ;;
+    l) tome_size=$OPTARG ;;
+    H) orient_override="horizontal" ;;
+    V) orient_override="vertical" ;;
+    *)
+      echo "Usage: $(basename "$0") [-s] [-l size] [-H | -V]"
+      exit 1
+      ;;
+  esac
 done
 
 if [ $tome_editor = '-' ]; then
-	# detect (n)vim
-	case "$EDITOR" in
-	*nvim*)
-		tome_editor="nvim"
-		;;
-	*)
-		tome_editor="vim"
-		;;
-	esac
+  # detect (n)vim
+  case "$EDITOR" in
+    *nvim*)
+      tome_editor="nvim"
+      ;;
+    *)
+      tome_editor="vim"
+      ;;
+  esac
 fi
 
-if [ $scratchpad = 1 ]; then
-	# open scratchpad
-	tmux split-window -c '#{pane_current_path}' -vb -l "$tome_height" "$tome_editor -c TomeScratchPad"
+if [ -n "$orient_override" ]; then
+  tome_orientation="$orient_override"
+fi
+
+if [ "$tome_orientation" = "horizontal" ]; then
+  orient="-h"
 else
-	# open tome playbook
-	tmux split-window -c '#{pane_current_path}' -vb -l "$tome_height" "$tome_editor -c TomePlayBook $tome_playbook"
+  orient="-v"
+fi
+
+if [ -z "$tome_size" ]; then
+  if [ "$tome_orientation" = "horizontal" ]; then
+    tome_size="50%"
+  else
+    tome_size="8"
+  fi
+fi
+
+if [ $scratchpad -eq 1 ]; then
+  # open scratchpad
+  tmux split-window -c '#{pane_current_path}' $orient -b -l "$tome_size" "$tome_editor -c TomeScratchPad"
+else
+  # open tome playbook
+  tmux split-window -c '#{pane_current_path}' $orient -b -l "$tome_size" "$tome_editor -c TomePlayBook $tome_playbook"
 fi
