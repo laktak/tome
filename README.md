@@ -172,15 +172,17 @@ $ tmux source-file ~/.tmux.conf
 If you want to open a playbook from a script you can use the `tome-open-playbook` command. It can be found where you installed the tmux plugin.
 
 ```
-Usage: tome-open-playbook [-s] [-l height]
+Usage: tome-open-playbook [-s] [-l size] [-H | -V]
 ```
 
-- `-s` will open a scratchpad
-- `-l` allows you to specify a height
+Uses the defaults set in tmux, you can override them with the options
 
+- `-s` will open a scratchpad
+- `-l` allows you to specify a size in lines/columns or as a percentage (e.g. `8` or `50%`)
+- `-H` horizontal split
+- `-V` vertical split
 
 ## Configuration
-
 
 ### Vim options
 
@@ -194,7 +196,6 @@ xmap <Leader>p <Plug>(TomePlaySelection)
 
 [See `help TomeConfig`](doc/tome.txt) in Vim to change them, and for more options.
 
-
 ### tmux options
 
 You can set any of these options by adding them to your `~/.tmux.conf` file:
@@ -203,14 +204,17 @@ You can set any of these options by adding them to your `~/.tmux.conf` file:
 set -g <option> "<value>"
 ```
 
-Where `<option>` and `<value>` correspond to one of the options specified below
+Where `<option>` and `<value>` correspond to one of the options specified below:
 
 | Option                 | Default         | Description |
 | :---                   | :---:           | :--- |
 | `@tome_key`            | `p`             | The key binding to open a Tome playbook. |
 | `@tome_scratch_key`    | `P`             | The key binding to open a Tome scratchpad. |
-| `@tome_height`         | `8`             | Height of the playbook vertial split. |
+| `@tome_split`          | `vertical`      | Split the window `vertical` panes stacked (top/bottom) or `horizontal` side by side (left/right). |
+| `@tome_size`           | `8` or `50%`(h) | Size of the playbook split:<br>- `8` lines when vertical<br>- `50%` columns when horizontal. |
+| `@tome_height`         | *(deprecated)*  | Legacy option kept for backward compatibility. Prefer `@tome_size`. |
 | `@tome_editor`         | detect (n)vim   | Manually set your preferred editor. |
 | `@tome_playbook`       | `.playbook.sh`  | Name of the playbook to open. |
+
 
 

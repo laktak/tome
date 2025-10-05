@@ -5,17 +5,22 @@ get_option() {
 	echo "${res:-$2}"
 }
 
-tome_height=$(get_option "@tome_height" 8)
+tome_split=$(get_option "@tome_split" vertical)
+# legacy option, only use if @tome_size is not defined
+tome_size=$(get_option "@tome_height" "")
+tome_size=$(get_option "@tome_size" "$tome_size")
 tome_playbook=$(get_option "@tome_playbook" .playbook.sh)
 tome_editor=$(get_option "@tome_editor" -)
 scratchpad=0
 
-while getopts 'sl:h' opt; do
+while getopts 'sl:HV' opt; do
 	case "$opt" in
 	s) scratchpad=1 ;;
-	l) tome_height=$OPTARG ;;
+	l) tome_size=$OPTARG ;;
+	H) tome_split="horizontal" ;;
+	V) tome_split="vertical" ;;
 	*)
-		echo "Usage: $(basename "$0") [-s] [-l height]"
+		echo "Usage: $(basename "$0") [-s] [-l size] [-H | -V]"
 		exit 1
 		;;
 	esac
@@ -33,10 +38,22 @@ if [ $tome_editor = '-' ]; then
 	esac
 fi
 
+if [ "$tome_split" = "horizontal" ]; then
+	orient="-h"
+	if [ -z "$tome_size" ]; then
+		tome_size="50%"
+	fi
+else
+	orient="-v"
+	if [ -z "$tome_size" ]; then
+		tome_size="8"
+	fi
+fi
+
 if [ $scratchpad = 1 ]; then
 	# open scratchpad
-	tmux split-window -c '#{pane_current_path}' -vb -l "$tome_height" "$tome_editor -c TomeScratchPad"
+	tmux split-window -c '#{pane_current_path}' $orient -b -l "$tome_size" "$tome_editor -c TomeScratchPad"
 else
 	# open tome playbook
-	tmux split-window -c '#{pane_current_path}' -vb -l "$tome_height" "$tome_editor -c TomePlayBook $tome_playbook"
+	tmux split-window -c '#{pane_current_path}' $orient -b -l "$tome_size" "$tome_editor -c TomePlayBook $tome_playbook"
 fi
