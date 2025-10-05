@@ -1,0 +1,20 @@
+name: ci
+
+on:
+  push:
+    branches: []
+  pull_request:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - run: |
+        wget https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_amd64
+        chmod +x shfmt_v3.12.0_linux_amd64
+        sudo mv shfmt_v3.12.0_linux_amd64 /usr/local/bin/shfmt
+
+    - name: chkfmt
+      run: scripts/chkfmt
