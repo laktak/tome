@@ -175,10 +175,12 @@ If you want to open a playbook from a script you can use the `tome-open-playbook
 Usage: tome-open-playbook [-s] [-l size] [-H | -V]
 ```
 
+Uses the defaults set in tmux, you can override them with the options
+
 - `-s` will open a scratchpad
-- `-l` allows you to specify a size in lines or percentage (e.g. `8` or `50%`)
-- `-H` forces a horizontal split for this run
-- `-V` forces a vertical split for this run
+- `-l` allows you to specify a size in lines/columns or as a percentage (e.g. `8` or `50%`)
+- `-H` horizontal split
+- `-V` vertical split
 
 ## Configuration
 
@@ -204,16 +206,15 @@ set -g <option> "<value>"
 
 Where `<option>` and `<value>` correspond to one of the options specified below:
 
-| Option              |         Default        | Description                                                                                  |
-| :------------------ | :--------------------: | :------------------------------------------------------------------------------------------- |
-| `@tome_key`         |           `p`          | The key binding to open a Tome playbook.                                                     |
-| `@tome_scratch_key` |           `P`          | The key binding to open a Tome scratchpad.                                                   |
-| `@tome_size`        | depends on orientation | Size of the playbook split:<br>• `8` lines when vertical<br>• `50%` columns when horizontal. |
-| `@tome_height`      |     *(deprecated)*     | Legacy option kept for backward compatibility. Prefer `@tome_size`.                          |
-| `@tome_editor`      |      detect (n)vim     | Manually set your preferred editor.                                                          |
-| `@tome_playbook`    |     `.playbook.sh`     | Name of the playbook to open.                                                                |
+| Option                 | Default         | Description |
+| :---                   | :---:           | :--- |
+| `@tome_key`            | `p`             | The key binding to open a Tome playbook. |
+| `@tome_scratch_key`    | `P`             | The key binding to open a Tome scratchpad. |
+| `@tome_split`          | `vertical`      | Split the window `vertical` panes stacked (top/bottom) or `horizontal` side by side (left/right). |
+| `@tome_size`           | `8` or `50%`(h) | Size of the playbook split:<br>- `8` lines when vertical<br>- `50%` columns when horizontal. |
+| `@tome_height`         | *(deprecated)*  | Legacy option kept for backward compatibility. Prefer `@tome_size`. |
+| `@tome_editor`         | detect (n)vim   | Manually set your preferred editor. |
+| `@tome_playbook`       | `.playbook.sh`  | Name of the playbook to open. |
 
-> **Note on orientation:** tmux names splits by the orientation of the dividing line, not the resulting panes.
-> - `vertical` split (`-v`) → panes stacked **top/bottom**
-> - `horizontal` split (`-h`) → panes side by side **left/right**
+
 
