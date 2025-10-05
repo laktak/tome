@@ -211,10 +211,18 @@ Where `<option>` and `<value>` correspond to one of the options specified below:
 | `@tome_key`            | `p`             | The key binding to open a Tome playbook. |
 | `@tome_scratch_key`    | `P`             | The key binding to open a Tome scratchpad. |
 | `@tome_split`          | `vertical`      | Split the window `vertical` panes stacked (top/bottom) or `horizontal` side by side (left/right). |
-| `@tome_size`           | `8` or `50%`(h) | Size of the playbook split:<br>- `8` lines when vertical<br>- `50%` columns when horizontal. |
+| `@tome_size`           | `8` or `50%`(h) | Size of the playbook split in lines/columns or percent. |
 | `@tome_height`         | *(deprecated)*  | Legacy option kept for backward compatibility. Prefer `@tome_size`. |
 | `@tome_editor`         | detect (n)vim   | Manually set your preferred editor. |
 | `@tome_playbook`       | `.playbook.sh`  | Name of the playbook to open. |
 
 
+## Contributions
 
+Thanks go to all contributors for their ideas and PRs!
+
+**If you make a PR, please keep it small so that it's easier to test and review. Try to create one PR per feature/bug.**
+
+Please run `scripts/fixfmt` if you change any shell code (remember to only use `sh` syntax!) and try to follow the vim style if you change anything there.
+
+(`.editorconfig` is untested)
