@@ -21,6 +21,14 @@ if !exists("g:tome_skip_prefix")
   let g:tome_skip_prefix = '^\$\s\+'
 endif
 
+if !exists("g:tome_highlight_duration")
+  let g:tome_highlight_duration = 500
+endif
+
+if !exists("g:tome_highlight_enabled")
+  let g:tome_highlight_enabled = 0
+endif
+
 let s:vars = {}
 
 function! TomeSetVar(name, value)
@@ -45,6 +53,62 @@ function! s:notify(text)
   else
     call popup_notification(a:text, #{time: 3000, pos: 'center'})
   endif
+endfunction
+
+function! s:highlightExecutedText(start_line, end_line)
+  if !g:tome_highlight_enabled
+    return
+  endif
+  
+  if !hlexists('TomeExecuted')
+    highlight default link TomeExecuted IncSearch
+  endif
+  
+  call s:clearExecutedHighlight()
+  
+  let s:tome_highlight_ids = []
+  for line_num in range(a:start_line, a:end_line)
+    let pattern = '\%'.line_num.'l.*'
+    let id = matchadd('TomeExecuted', pattern)
+    call add(s:tome_highlight_ids, id)
+  endfor
+  
+  if has('timers')
+    let s:tome_highlight_timer = timer_start(g:tome_highlight_duration, function('s:tomeClearHighlightTimer'))
+  else
+    call s:clearExecutedHighlight()
+  endif
+endfunction
+
+function! s:clearExecutedHighlight()
+  if exists('s:tome_highlight_ids')
+    for id in s:tome_highlight_ids
+      try
+        call matchdelete(id)
+      catch
+        " Ignore errors if highlight doesn't exist
+      endtry
+    endfor
+    unlet s:tome_highlight_ids
+  endif
+  if exists('s:tome_highlight_timer')
+    call timer_stop(s:tome_highlight_timer)
+    unlet s:tome_highlight_timer
+  endif
+endfunction
+
+function! s:tomeClearHighlightTimer(timer)
+  call s:clearExecutedHighlight()
+endfunction
+
+function! s:setHighlightColor(color_spec)
+  execute
+endfunction
+
+function! s:testHighlight()
+  let current_line = line(".")
+  call s:highlightExecutedText(current_line, current_line)
+  echo
 endfunction
 
 function! s:tomeSubstituteVars(text)
@@ -214,14 +278,28 @@ function! s:prepAndSendCommand(targetOffset, text)
 endfunction
 
 function! s:playLine()
+  let current_line = line(".")
+  call s:highlightExecutedText(current_line, current_line)
   call s:prepAndSendCommand(v:count, getline(".")."\n")
 endfunction
 
 function! s:playSel()
+  let start_line = line("'<")
+  let end_line = line("'>")
+  call s:highlightExecutedText(start_line, end_line)
   call s:prepAndSendCommand(v:count, s:getVisualSelection())
 endfunction
 
 function! s:playParagraph()
+  let start = search('^$', 'bnW')
+  let end = search('^$', 'nW')
+  if end > 0
+    let end = end - 1
+  else
+    let end = line('$')
+  endif
+  let start_line = start + 1
+  call s:highlightExecutedText(start_line, end)
   call s:prepAndSendCommand(v:count, s:getParagraph() . "\n")
 endfunction
 
@@ -251,6 +329,9 @@ xnoremap <silent> <Plug>(TomePlaySelection) :<C-U>call <SID>playSel()<CR>
 command! TomePlayBook call s:mapBufferCRToPlay()
 command! -nargs=? TomeScratchPad call s:markScratch(<q-args>)|call s:mapBufferCRToPlay()
 command! -nargs=? TomeScratchPadOnly call s:markScratch(<q-args>)
+command! TomeClearHighlight call s:clearExecutedHighlight()
+command! -nargs=1 TomeSetHighlightColor call s:setHighlightColor(<q-args>)
+command! TomeTestHighlight call s:testHighlight()
 
 
 if !exists("g:tome_no_mappings")

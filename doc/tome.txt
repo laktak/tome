@@ -114,4 +114,34 @@ let g:tome_vars = 0
 ```
 
 
+HIGHLIGHT EXECUTED TEXT                         *TomeHighlight*
+
+Tome can briefly highlight the text you execute (line/selection/paragraph),
+similar to vim-highlightedyank. This is disabled by default.
+
+Options:
+
+```
+" enable (default: 0)
+let g:tome_highlight_enabled = 1
+
+" duration in milliseconds (default: 500)
+let g:tome_highlight_duration = 500
+```
+
+Commands:
+
+```
+:TomeClearHighlight          " clear any active execution highlight
+:TomeSetHighlightColor {hl}  " set colors, e.g.: ctermbg=Yellow ctermfg=Black
+:TomeTestHighlight           " highlight current line to test your colors/setup
+```
+
+Notes:
+
+- By default the highlight links to |IncSearch| through the `TomeExecuted`
+  highlight group. You can customize it via `:TomeSetHighlightColor ...` or by
+  setting your own highlight group definition for `TomeExecuted`.
+
+
  vim:tw=78:ts=8:ft=help:norl:
