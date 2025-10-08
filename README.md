@@ -194,33 +194,12 @@ nmap <Leader>P <Plug>(TomePlayParagraph)
 xmap <Leader>p <Plug>(TomePlaySelection)
 ```
 
-[See `help TomeConfig`](doc/tome.txt) in Vim to change them, and for more options.
+[See `help TomeConfig`](doc/tome.txt) in Vim to change them, and for more options:
 
-#### Execution highlighting (optional)
+- execution highlighting
+- "no send" to prevent sending commands vim and other TUIs.
+- target to send to vim terminal instead of tmux
 
-You can optionally highlight what you execute (line/selection/paragraph) for a
-short time.
-
-Enable and configure in your vimrc:
-
-```
-" enable highlighting (default is 0/off)
-let g:tome_highlight_enabled = 1
-
-" how long to highlight in ms (default 500)
-let g:tome_highlight_duration = 500
-```
-
-Commands:
-
-```
-:TomeClearHighlight
-:TomeSetHighlightColor ctermbg=Yellow ctermfg=Black
-:TomeTestHighlight
-```
-
-The highlight links to `IncSearch` via the `TomeExecuted` group by default; you
-can customize colors with `:TomeSetHighlightColor ...`.
 
 ### tmux options
 
