@@ -114,4 +114,19 @@ let g:tome_vars = 0
 ```
 
 
+HIGHLIGHT EXECUTED TEXT                         *TomeHighlight*
+
+Tome can briefly highlight the lines you executed. This is disabled by default.
+Note that TomePlaySelection will highlight the full lines.
+
+```
+" enable highlighting with > 0
+let g:tome_highlight_ms = 500
+```
+
+By default the highlight links to |IncSearch| through the `TomeExecuted`
+highlight group. You can customize it by setting your own highlight group
+definition for `TomeExecuted`.
+
+
  vim:tw=78:ts=8:ft=help:norl:

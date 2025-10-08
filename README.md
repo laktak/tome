@@ -194,7 +194,12 @@ nmap <Leader>P <Plug>(TomePlayParagraph)
 xmap <Leader>p <Plug>(TomePlaySelection)
 ```
 
-[See `help TomeConfig`](doc/tome.txt) in Vim to change them, and for more options.
+[See `help TomeConfig`](doc/tome.txt) in Vim to change them, and for more options:
+
+- execution highlighting
+- "no send" to prevent sending commands vim and other TUIs.
+- target to send to vim terminal instead of tmux
+
 
 ### tmux options
 
