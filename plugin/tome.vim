@@ -237,7 +237,7 @@ function! s:prepAndSendCommand(targetOffset, text)
     enew
     call s:markScratch("vars")
     call s:mapBufferCRToPlay()
-    let x = "# please define the following tome variables\n" . join(map(missing, {idx, val -> '$<' . val . '>='}), "\n")."\n"
+    let x = "# please define the following tome variables (enter to set)\n" . join(map(missing, {idx, val -> '$<' . val . '>='}), "\n")."\n"
     silent! put =x
   elseif cmd != ""
     if s:getTarget() == 'vim'
@@ -277,6 +277,19 @@ function! s:playParagraph()
   call s:prepAndSendCommand(v:count, s:getAndHighlightParagraph() . "\n")
 endfunction
 
+function! s:editVar()
+  enew
+  call s:markScratch("vars")
+  call s:mapBufferCRToPlay()
+  if len(s:vars) == 0
+    let vars = ['$<example>=test']
+  else
+    let vars = map(sort(keys(s:vars)), {idx, val -> '$<' . val . '>=' . s:vars[val]})
+  endif
+  let x = "# tome variable editor (enter to set)\n" . join(vars, "\n") . "\n"
+  silent! put =x
+endfunction
+
 function! s:mapBufferCRToPlay()
   nnoremap <script> <silent> <nowait> <buffer> <CR> :<C-U>call <SID>playLine()<CR>
 endfunction
@@ -299,10 +312,12 @@ endfunction
 nnoremap <silent> <Plug>(TomePlayLine) :<C-U>call <SID>playLine()<CR>
 nnoremap <silent> <Plug>(TomePlayParagraph) :<C-U>call <SID>playParagraph()<CR>
 xnoremap <silent> <Plug>(TomePlaySelection) :<C-U>call <SID>playSel()<CR>
+nnoremap <silent> <Plug>(TomeVar) :<C-U>call <SID>editVar()<CR>
 
 command! TomePlayBook call s:mapBufferCRToPlay()
 command! -nargs=? TomeScratchPad call s:markScratch(<q-args>)|call s:mapBufferCRToPlay()
 command! -nargs=? TomeScratchPadOnly call s:markScratch(<q-args>)
+command! TomeVar call s:editVar()
 
 if !exists("g:tome_no_mappings")
 

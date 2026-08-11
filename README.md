@@ -15,6 +15,11 @@ Tome puts Vim "above", where you write and collect your commands which are then 
 
 ![intro](https://github.com/laktak/tome/wiki/assets/intro1.gif)
 
+## Changes
+
+- Added TomeVar command to list/edit existing variables in scratch buffer
+
+## Index
 
 - [Introduction](#introduction)
 - [Requirements](#requirements)

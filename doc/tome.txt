@@ -41,6 +41,8 @@ COMMANDS                                        *TomeCommands*
 *TomeScratchPadOnly* [name]
                         Like |TomeScratchPad| but do not map `<Enter>`.
 
+*TomeVar*               Open a scratch buffer listing all current variables for editing.
+
 
 VARIABLES                                       *TomeVariables*
 
@@ -97,6 +99,7 @@ Then add your own mappings:
 nmap <Leader>p <Plug>(TomePlayLine)
 nmap <Leader>P <Plug>(TomePlayParagraph)
 xmap <Leader>p <Plug>(TomePlaySelection)
+nmap <Leader>v <Plug>(TomeVar)
 ```
 
 
