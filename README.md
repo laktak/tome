@@ -177,11 +177,12 @@ $ tmux source-file ~/.tmux.conf
 If you want to open a playbook from a script you can use the `tome-open-playbook` command. It can be found where you installed the tmux plugin.
 
 ```
-Usage: tome-open-playbook [-s] [-l size] [-H | -V]
+Usage: tome-open-playbook [-f] [-s] [-l size] [-H | -V]
 ```
 
 Uses the defaults set in tmux, you can override them with the options
 
+- `-f` force a new pane even if a tome pane already exists
 - `-s` will open a scratchpad
 - `-l` allows you to specify a size in lines/columns or as a percentage (e.g. `8` or `50%`)
 - `-H` horizontal split
@@ -197,6 +198,12 @@ By default Tome has the following mappings:
 nmap <Leader>p <Plug>(TomePlayLine)
 nmap <Leader>P <Plug>(TomePlayParagraph)
 xmap <Leader>p <Plug>(TomePlaySelection)
+```
+
+You may also want to define:
+
+```
+xmap <Leader>v <Plug>(TomeVar)
 ```
 
 [See `help TomeConfig`](doc/tome.txt) in Vim to change them, and for more options:
@@ -221,8 +228,7 @@ Where `<option>` and `<value>` correspond to one of the options specified below:
 | `@tome_key`            | `p`             | The key binding to open a Tome playbook. |
 | `@tome_scratch_key`    | `P`             | The key binding to open a Tome scratchpad. |
 | `@tome_split`          | `vertical`      | Split the window `vertical` panes stacked (top/bottom) or `horizontal` side by side (left/right). |
-| `@tome_size`           | `8` or `50%`(h) | Size of the playbook split in lines/columns or percent. |
-| `@tome_height`         | *(deprecated)*  | Legacy option kept for backward compatibility. Prefer `@tome_size`. |
+| `@tome_size`           | `8` or `50%`(h) | Size of the playbook split in lines/columns or percent. (use instead of legacy `@tome_height`) |
 | `@tome_editor`         | detect (n)vim   | Manually set your preferred editor. |
 | `@tome_playbook`       | `.playbook.sh`  | Name of the playbook to open. |
 
