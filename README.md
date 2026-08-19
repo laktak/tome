@@ -18,6 +18,7 @@ Tome puts Vim "above", where you write and collect your commands which are then 
 ## Changes
 
 - Added TomeVar command to list/edit existing variables in scratch buffer
+- Now switches to existing Tome pane on open
 
 ## Index
 
@@ -30,6 +31,8 @@ Tome puts Vim "above", where you write and collect your commands which are then 
 - [Configuration](#configuration)
   - [Vim options](#vim-options)
   - [tmux options](#tmux-options)
+- [Alternatives](#alternatives)
+- [Contributions](#contributions)
 
 
 ## Introduction
@@ -231,6 +234,11 @@ Where `<option>` and `<value>` correspond to one of the options specified below:
 | `@tome_size`           | `8` or `50%`(h) | Size of the playbook split in lines/columns or percent. (use instead of legacy `@tome_height`) |
 | `@tome_editor`         | detect (n)vim   | Manually set your preferred editor. |
 | `@tome_playbook`       | `.playbook.sh`  | Name of the playbook to open. |
+
+
+## Alternatives
+
+[zellij-playbooks](https://github.com/yaroslavborbat/zellij-playbooks) is a Zellij plugin for managing and executing playbook files.
 
 
 ## Contributions
