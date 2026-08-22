@@ -160,7 +160,7 @@ function! s:getAndHighlightParagraph()
   if end > 0
     let end = end - 1
   else
-    let end = '$'
+    let end = line('$')
   endif
   call s:setExecutedHighlight(start + 1, end)
   let res = getbufline("%", start+1, end)
